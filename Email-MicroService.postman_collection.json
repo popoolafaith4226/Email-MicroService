@@ -1,0 +1,467 @@
+{
+	"info": {
+		"_postman_id": "42c627ed-15c4-4707-a746-958c49071f84",
+		"name": "Email-MicroService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29705819",
+		"_collection_link": "https://gold-firefly-392762.postman.co/workspace/e912d2d7-b95e-49f4-82b6-c8a778a4235c/collection/29705819-42c627ed-15c4-4707-a746-958c49071f84?action=share&source=collection_link&creator=29705819"
+	},
+	"item": [
+		{
+			"name": "SendEmail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {\r",
+							"    pm.response.to.have.status(202);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains success=true\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.success).to.eql(true);\r",
+							"    pm.expect(jsonData.message).to.eql(\"Job accepted into the queue\");\r",
+							"    pm.expect(jsonData.data).to.have.property(\"email_id\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-mock-response",
+						"value": "success",
+						"type": "text"
+					},
+					{
+						"key": "x-mock-response",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"to\": \"user@example.com\",\r\n  \"subject\": \"Welcome!\",\r\n  \"body\": \"Thanks for signing up.\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bcd38c30-223e-43b6-aac4-9a699cbad656.mock.pstmn.io/send-email",
+					"protocol": "https",
+					"host": [
+						"bcd38c30-223e-43b6-aac4-9a699cbad656",
+						"mock",
+						"pstmn",
+						"io"
+					],
+					"path": [
+						"send-email"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SendEmail",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-mock-response",
+								"value": "success",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"to\": \"user@example.com\",\r\n  \"subject\": \"Welcome!\",\r\n  \"body\": \"Thanks for signing up.\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://bcd38c30-223e-43b6-aac4-9a699cbad656.mock.pstmn.io/send-email",
+							"protocol": "https",
+							"host": [
+								"bcd38c30-223e-43b6-aac4-9a699cbad656",
+								"mock",
+								"pstmn",
+								"io"
+							],
+							"path": [
+								"send-email"
+							]
+						}
+					},
+					"status": "Accepted",
+					"code": 202,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date",
+							"domain": "",
+							"path": ""
+						}
+					],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Job accepted into the queue\",\n    \"data\": {\n        \"email_id\": \"abc123def456\",\n        \"to\": \"user@example.com\",\n        \"subject\": \"Welcome!\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "InvalidEmail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message for invalid email\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.success).to.eql(false);\r",
+							"    pm.expect(jsonData.message).to.eql(\"Invalid email format for parameter: 'to'\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-mock-response",
+						"value": "invalid-email",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"to\": \"user@@example\",\r\n  \"subject\": \"Welcome!\",\r\n  \"body\": \"Thanks for signing up.\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bcd38c30-223e-43b6-aac4-9a699cbad656.mock.pstmn.io/send-email",
+					"protocol": "https",
+					"host": [
+						"bcd38c30-223e-43b6-aac4-9a699cbad656",
+						"mock",
+						"pstmn",
+						"io"
+					],
+					"path": [
+						"send-email"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "InvalidEmail",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-mock-response",
+								"value": "invalid-email",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"to\": \"user@@example\",\r\n  \"subject\": \"Welcome!\",\r\n  \"body\": \"Thanks for signing up.\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://bcd38c30-223e-43b6-aac4-9a699cbad656.mock.pstmn.io/send-email",
+							"protocol": "https",
+							"host": [
+								"bcd38c30-223e-43b6-aac4-9a699cbad656",
+								"mock",
+								"pstmn",
+								"io"
+							],
+							"path": [
+								"send-email"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date",
+							"domain": "",
+							"path": ""
+						}
+					],
+					"body": "{\r\n    \"success\": false,\r\n    \"message\": \"Invalid email format for parameter: 'to'\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "MissingField",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 422\", function () {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message for missing 'to'\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.success).to.eql(false);\r",
+							"    pm.expect(jsonData.message).to.eql(\"Recipient 'to' field is required.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-mock-response",
+						"value": "missing-to",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": \"Hello\",\r\n  \"body\": \"Welcome to QA Task\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bcd38c30-223e-43b6-aac4-9a699cbad656.mock.pstmn.io/send-email",
+					"protocol": "https",
+					"host": [
+						"bcd38c30-223e-43b6-aac4-9a699cbad656",
+						"mock",
+						"pstmn",
+						"io"
+					],
+					"path": [
+						"send-email"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "MissingField",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-mock-response",
+								"value": "missing-to",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"subject\": \"Hello\",\r\n  \"body\": \"Welcome to QA Task\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://bcd38c30-223e-43b6-aac4-9a699cbad656.mock.pstmn.io/send-email",
+							"protocol": "https",
+							"host": [
+								"bcd38c30-223e-43b6-aac4-9a699cbad656",
+								"mock",
+								"pstmn",
+								"io"
+							],
+							"path": [
+								"send-email"
+							]
+						}
+					},
+					"status": "Unprocessable Content",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date",
+							"domain": "",
+							"path": ""
+						}
+					],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Recipient 'to' field is required.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "QueueFull",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 503\", function () {\r",
+							"    pm.response.to.have.status(503);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message for queue full\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.success).to.eql(false);\r",
+							"    pm.expect(jsonData.message).to.eql(\"Queue is full. Please retry after some time.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-mock-response",
+						"value": "queue-full",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"to\": \"user@example.com\",\r\n  \"subject\": \"Welcome!\",\r\n  \"body\": \"Thanks for signing up.\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bcd38c30-223e-43b6-aac4-9a699cbad656.mock.pstmn.io/send-email",
+					"protocol": "https",
+					"host": [
+						"bcd38c30-223e-43b6-aac4-9a699cbad656",
+						"mock",
+						"pstmn",
+						"io"
+					],
+					"path": [
+						"send-email"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "QueueFull",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-mock-response",
+								"value": "queue-full",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"to\": \"user@example.com\",\r\n  \"subject\": \"Welcome!\",\r\n  \"body\": \"Thanks for signing up.\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://bcd38c30-223e-43b6-aac4-9a699cbad656.mock.pstmn.io/send-email",
+							"protocol": "https",
+							"host": [
+								"bcd38c30-223e-43b6-aac4-9a699cbad656",
+								"mock",
+								"pstmn",
+								"io"
+							],
+							"path": [
+								"send-email"
+							]
+						}
+					},
+					"status": "Service Unavailable",
+					"code": 503,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date",
+							"domain": "",
+							"path": ""
+						}
+					],
+					"body": "{\n    \"success\": false,\n    \"message\": \"Queue is full. Please retry after some time.\"\n}"
+				}
+			]
+		}
+	]
+}
