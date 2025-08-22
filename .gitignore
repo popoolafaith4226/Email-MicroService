@@ -1,0 +1,2 @@
+"node_modules/" 
+"htmlreport/*.html"   # Optional: exclude generated reports
